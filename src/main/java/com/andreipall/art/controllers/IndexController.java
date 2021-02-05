@@ -3,16 +3,21 @@ package com.andreipall.art.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.andreipall.art.dto.CommentDTO;
 import com.andreipall.art.entities.Painting;
@@ -41,7 +46,13 @@ public class IndexController {
 	}
 
 	@GetMapping("/paintings")
-	String paintings(Model model) {
+	String paintings(@RequestParam("page") Optional<Integer> page, Model model) {
+		int currentPage = page.orElse(1);
+		Page<Painting> paintingsPage = paintingService.findPaginated(currentPage - 1, 9);
+		List<Painting> listPaintings = paintingsPage.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", paintingsPage.getTotalPages());
+		model.addAttribute("listPaintings", listPaintings);
 		model.addAttribute("module", "paintings");
 		return "paintings";
 	}

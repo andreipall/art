@@ -14,7 +14,7 @@
         <hr>
 
         <!-- Date/Time -->
-        <p>Posted on <span th:text="${#dates.dayOfWeekName(createdAt)} + ', ' + ${#dates.day(createdAt)} + ' ' + ${#dates.monthName(createdAt)} + ' ' + ${#dates.year(createdAt)} + ' at ' + ${#dates.hour(createdAt)} + ':' + ${#dates.minute(createdAt)}"></span></p>
+        <p>Posted on <span th:text="|${#calendars.format(createdAt, 'EEEE, dd MMMMM yyyy')} at ${#calendars.format(createdAt, 'HH:mm')}|"></span></p>
 
         <hr>
 
