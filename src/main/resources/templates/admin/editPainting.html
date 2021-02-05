@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="admin/standardLayout" th:include="admin/standardLayout :: page(title='Pall Andrei - Admin')">
+
+    <div th:fragment="content">
+      <h2>Edit painting</h2>
+      <div class="table-responsive">
+		<form th:action="@{|/admin/paintings/${id}/edit|}" th:object="${paintingDTO}" method="post" enctype="multipart/form-data">
+          <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+			  Please correct errors below
+		  </div>
+		  <div class="mb-3">
+		    <img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/paintings/${slug}/${image}|}" alt="painting" style="height: 200px;"><br>
+		  </div>
+		  <div class="mb-3">
+		    <label for="name" class="form-label">Name</label>
+		    <input type="text" name="name" th:field="*{name}" class="form-control" id="name" aria-describedby="nameError">
+		    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" id="nameError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <label for="description" class="form-label">Description</label>
+		    <textarea name="description" th:field="*{description}" class="form-control" id="description" rows="4" cols="50" aria-describedby="descriptionError"></textarea>
+		    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" id="descriptionError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <label for="image" class="form-label">Image</label>
+		    <input type="file" name="image" th:field="*{image}" class="form-control" id="image" aria-describedby="imageError">
+		    <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" id="imageError" class="form-text error">Error</div>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<hr>  
+		<h5>Comments:</h5>
+		<!-- Modal -->
+		<div class="modal fade" id="deleteComment" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modalLabel">Delete comment</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <strong>Are you sure you want to delete this comment:</strong><br>
+		        <h5 id="modalName"></h5>
+		        <p id="modalComment"></p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		        <button type="button" id="confirmDeleteComment" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Single Comment -->
+        <div class="media mb-4" th:each="comment : ${comments}">
+          <div class="media-body" style="width: 80%; float: left;">
+            <h5 class="mt-0" th:text="${comment.name}">Commenter Name</h5>
+            <span th:text="${comment.comment}">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</span>
+          </div>
+          <div style="width: 20%;float: right;margin-top: 10px;"><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteComment" th:attr="data-bs-painting-id=${id}, data-bs-id=${comment.id}, data-bs-name=${comment.name}, data-bs-comment=${comment.comment}">Delete</button></div>
+          
+        </div>      
+      </div>
+    </div>
+    <th:block layout:fragment="script"><script th:src="@{/js/admin/editPainting.js}"></script></th:block>
+</html>

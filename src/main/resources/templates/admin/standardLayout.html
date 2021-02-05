@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:fragment="page(title)">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <title th:text="${title}">Pall Andrei - Title</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" th:href="@{/bootstrap/icons/font/bootstrap-icons.css}">
+	<link href="/docs/5.0/dist/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico" th:href="@{/images/favicon.ico}">    
+    <!-- Custom styles for this template -->
+    <link href="admin.css" th:href="@{/css/admin.css}" rel="stylesheet">
+  </head>
+  <body>
+    
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#" th:href="@{/admin}"><i class="bi bi-cursor-fill"></i> Andrei Pall - ADMINISTRATION</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="#" th:href="@{/logout}"><i class="bi bi-box-arrow-in-right"></i> Logout</a>
+    </li>
+  </ul>
+</header>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${module == 'dashboard' ? 'active' : ''}" aria-current="page" href="#" th:href="@{/admin}">
+              <i class="bi bi-house-door"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${module == 'paintings' ? 'active' : ''}" href="#" th:href="@{/admin/paintings}">
+              <i class="bi bi-palette"></i> Paintings
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${module == 'exhibitions' ? 'active' : ''}" href="#" th:href="@{/admin/exhibitions}">
+              <i class="bi bi-images"></i> Exhibitions
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${module == 'blog' ? 'active' : ''}" href="#" th:href="@{/admin/blog}">
+              <i class="bi bi-newspaper"></i> Blog
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+		<div th:replace="this :: content">content</div>
+    </main>
+  </div>
+</div>
+
+
+    <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script src="admin.js" th:src="@{/js/admin.js}"></script>
+    <th:block layout:fragment="script"></th:block>
+  </body>
+</html>

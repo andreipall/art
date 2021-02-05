@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="standardLayout :: page(title='Pall Andrei - Blog')">
+
+<div th:fragment="content">
+
+
+  <div class="row">
+    <!-- Blog Entries Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4" th:text="${name}">Post Title</h1>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Posted on <span th:text="${#dates.dayOfWeekName(createdAt)} + ', ' + ${#dates.day(createdAt)} + ' ' + ${#dates.monthName(createdAt)} + ' ' + ${#dates.year(createdAt)} + ' at ' + ${#dates.hour(createdAt)} + ':' + ${#dates.minute(createdAt)}"></span></p>
+
+        <hr>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/paintings/${slug}/${image}|}" alt="painting">
+
+        <hr>
+
+        <!-- Post Content -->
+        <div th:text="${description}"></div>
+
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <div th:if="${message}" th:text="${message}" class="alert alert-success" role="alert">
+			  A simple success alert—check it out!
+			</div>
+            <form action="" th:object="${commentDTO}" method="post">
+              <div class="mb-3">
+			    <label for="name" class="form-label">Name</label>
+			    <input type="text" class="form-control" id="name" name="name" th:field="*{name}">
+			    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" id="nameError" class="form-text error">Error</div>
+			  </div>
+              <div class="mb-3">
+                <label for="comment" class="form-label">Comment</label>
+                <textarea id="comment" class="form-control" rows="3" name="comment" th:field="*{comment}"></textarea>
+                <div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" id="commentError" class="form-text error">Error</div>
+              </div>
+              <div class="mb-3">
+              	<button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Single Comment -->
+        <div class="media mb-4" th:each="comment : ${comments}">
+          <div class="media-body">
+            <h5 class="mt-0" th:text="${comment.name}">Commenter Name</h5>
+            <span th:text="${comment.comment}">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</span>
+          </div>
+        </div>
+
+      </div>
+
+    <div th:replace="fragments/sidebar :: sidebar(module=${module})">sidebar</div>
+
+  </div><!-- /.row -->
+
+
+
+</div><!-- /.container -->

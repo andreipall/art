@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="standardLayout :: page(title='Pall Andrei - Log in')">
+
+<div th:fragment="content" class="form-signin text-center">
+  <form>
+    <img src="/images/logo.png" th:src="@{/images/logo.png}" id="logo-login" class="mb-4" alt="logo" width="95"/>
+    <h1 class="h3 mb-3 fw-normal">Please login</h1>
+    <label for="inputEmail" class="visually-hidden">Username</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+    <label for="inputPassword" class="visually-hidden">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+  </form>
+
+</div><!-- /.container -->
