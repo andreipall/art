@@ -56,7 +56,7 @@ public class AdminController {
 	@GetMapping("/paintings")
 	String paintings(@RequestParam("page") Optional<Integer> page, Model model) {
 		int currentPage = page.orElse(1);
-		Page<Painting> paintingsPage = paintingService.findPaginated(currentPage - 1, 20);
+		Page<Painting> paintingsPage = paintingService.findPaginated(currentPage - 1, 10);
 		List<Painting> listPaintings = paintingsPage.getContent();
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("totalPages", paintingsPage.getTotalPages());
@@ -143,6 +143,14 @@ public class AdminController {
 		return "redirect:/admin/paintings";
 	}
 	
+	@DeleteMapping("/paintings/{id}")
+	ResponseEntity<?> deletePainting(@PathVariable int id) {
+		Painting painting = new Painting();
+		painting.setId(id);
+		this.paintingService.deletePainting(painting);
+		return ResponseEntity.ok().build();
+	}
+	
 	@DeleteMapping("/paintings/{id}/comments/{commentId}")
 	ResponseEntity<?> deletePaintingComment(@PathVariable int id, @PathVariable int commentId) {
 		PaintingComment paintingComment = new PaintingComment();
@@ -155,11 +163,5 @@ public class AdminController {
 	String exhibitions(Model model) {
 		model.addAttribute("module", "exhibitions");
 		return "admin/exhibitions";
-	}
-
-	@GetMapping("/blog")
-	String blog(Model model) {
-		model.addAttribute("module", "blog");
-		return "admin/blog";
 	}
 }

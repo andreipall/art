@@ -60,5 +60,10 @@ public class PaintingServiceImpl implements PaintingService {
 	public void deletePaintingComment(PaintingComment paintingComment) {
 		this.paintingCommentRepository.deleteById(paintingComment.getId());
 	}
+
+	@Override
+	public void deletePainting(Painting painting) {
+		this.paintingRepository.deleteById(painting.getId());
+	}
 	
 }

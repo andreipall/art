@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="admin/standardLayout :: page(title='Pall Andrei - Admin')">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="admin/standardLayout" th:include="admin/standardLayout :: page(title='Pall Andrei - Admin')">
 
     <div th:fragment="content">
       <h2>Paintings</h2>
@@ -8,6 +9,25 @@
 		  A simple success alert—check it out!
 		</div>
       	<a class="btn btn-success" href="new.html" th:href="@{/admin/paintings/new}"><i class="bi bi-pencil"></i> New</a>
+      	<!-- Modal -->
+		<div class="modal fade" id="deletePainting" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modalLabel">Delete painting</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <strong>Are you sure you want to delete this painting:</strong><br>
+		        <h6 id="modalName"></h6>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		        <button type="button" id="confirmDeletePainting" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -24,7 +44,7 @@
               <td th:text="${#strings.abbreviate(painting.description,200)}">Lorem</td>
               <td><a th:href="@{/paintings/{slug}(slug=${painting.slug})}" class="btn btn-success" target="_blank">View</a></td>
               <td><a th:href="@{/admin/paintings/{id}/edit(id=${painting.id})}" class="btn btn-primary">Edit</a></td>
-              <td><a th:href="@{/admin/paintings/{id}/delete(id=${painting.id})}" class="btn btn-danger">Delete</a></td>
+              <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePainting" th:attr="data-bs-painting-id=${painting.id}, data-bs-painting-name=${painting.name}">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -46,4 +66,5 @@
 		</nav>
       </div>
     </div>
+    <th:block layout:fragment="script"><script th:src="@{/js/admin/paintings.js}"></script></th:block>
 </html>

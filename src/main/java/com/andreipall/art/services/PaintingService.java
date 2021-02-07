@@ -13,4 +13,5 @@ public interface PaintingService {
 	public abstract void addPaintingComment(PaintingComment paintingComment);
 	public abstract void deletePaintingComment(PaintingComment paintingComment);
 	public abstract void savePainting(Painting painting);
+	public abstract void deletePainting(Painting painting);
 }

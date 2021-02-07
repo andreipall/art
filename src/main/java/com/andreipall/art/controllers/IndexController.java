@@ -105,15 +105,4 @@ public class IndexController {
 		return "redirect:/paintings/" + slug;
 	}
 
-	@GetMapping("/blog")
-	String blog(Model model) {
-		model.addAttribute("module", "blog");
-		return "blog";
-	}
-
-	@GetMapping("/blog/post")
-	String blogPost(Model model) {
-		model.addAttribute("module", "blog");
-		return "blogPost";
-	}
 }

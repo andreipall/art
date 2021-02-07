@@ -27,9 +27,6 @@
         <a class="blog-header-logo text-dark" href="#">Pall Andrei</a>
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
-        <a class="link-secondary" href="#" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
-        </a>
         <a class="btn btn-sm btn-outline-secondary" href="#" th:href="@{/login}">Login</a>
       </div>
     </div>
@@ -51,9 +48,6 @@
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" th:classappend="${module == 'exhibitions' ? 'active' : ''}" aria-current="page" href="#" th:href="@{/exhibitions}"><i class="bi bi-images"></i> Exhibitions</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" th:classappend="${module == 'blog' ? 'active' : ''}" href="#" th:href="@{/blog}"><i class="bi bi-newspaper"></i> Blog</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" th:classappend="${module == 'about-me' ? 'active' : ''}" href="#" th:href="@{/about-me}"><i class="bi bi-receipt"></i> About me</a>

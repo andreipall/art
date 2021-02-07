@@ -5,7 +5,7 @@
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col" th:each="painting : ${listPaintings}">
           <div class="card shadow-sm">
-            <a th:href="@{/paintings/{slug}(slug=${painting.slug})}" style="text-align: center;"><img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/paintings/${painting.slug}/${painting.imageName}|}" alt="painting" style="width: max-content; max-height: 200px;"></a>
+            <a th:href="@{/paintings/{slug}(slug=${painting.slug})}" style="text-align: center;"><img class="img-fluid rounded painting" src="http://placehold.it/900x300" th:src="@{|/paintings/${painting.slug}/${painting.imageName}|}" alt="painting"></a>
 
             <div class="card-body">
               <p class="card-text" th:text="${#strings.abbreviate(painting.description,200)}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
