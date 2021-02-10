@@ -8,10 +8,11 @@
             <a th:href="@{/paintings/{slug}(slug=${painting.slug})}" style="text-align: center;"><img class="img-fluid rounded painting" src="http://placehold.it/900x300" th:src="@{|/paintings/${painting.slug}/${painting.imageName}|}" alt="painting"></a>
 
             <div class="card-body">
+              <h3 th:text="${painting.name}">Heading</h3>
               <p class="card-text" th:text="${#strings.abbreviate(painting.description,200)}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a class="btn btn-sm btn-outline-secondary" th:href="@{/paintings/{slug}(slug=${painting.slug})}">View</a>
+                  <a class="btn btn-sm btn-outline-secondary" th:href="@{/paintings/{slug}(slug=${painting.slug})}">View details &raquo;</a>
                 </div>
                 <small class="text-muted" th:text="${#calendars.format(painting.createdAt, 'dd MMMMM yyyy HH:mm')}">9 mins</small>
               </div>

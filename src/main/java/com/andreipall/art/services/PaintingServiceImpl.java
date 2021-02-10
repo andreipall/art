@@ -1,5 +1,7 @@
 package com.andreipall.art.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +66,16 @@ public class PaintingServiceImpl implements PaintingService {
 	@Override
 	public void deletePainting(Painting painting) {
 		this.paintingRepository.deleteById(painting.getId());
+	}
+
+	@Override
+	public List<Painting> findLatestPaintings() {
+		return this.paintingRepository.findTop6ByOrderByCreatedAtDesc();
+	}
+
+	@Override
+	public List<Painting> findLatest3Paintings() {
+		return this.paintingRepository.findTop3ByOrderByCreatedAtDesc();
 	}
 	
 }

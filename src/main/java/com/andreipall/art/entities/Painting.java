@@ -29,7 +29,7 @@ public class Painting extends DateAudit {
 	private byte[] imageData;
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
-	@OneToMany(mappedBy = "painting", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "painting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PaintingComment> comments = new ArrayList<>();
 
 	public Painting() {
