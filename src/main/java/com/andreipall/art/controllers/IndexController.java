@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -20,18 +19,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.andreipall.art.dto.CommentDTO;
+import com.andreipall.art.entities.Exhibition;
 import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
+import com.andreipall.art.services.ExhibitionService;
 import com.andreipall.art.services.PaintingService;
 
 @Controller
 public class IndexController {
 	private PaintingService paintingService;
+	private ExhibitionService exhibitionService;
 
 	@Autowired
-	public IndexController(PaintingService paintingService) {
+	public IndexController(PaintingService paintingService, ExhibitionService exhibitionService) {
 		super();
 		this.paintingService = paintingService;
+		this.exhibitionService = exhibitionService;
 	}
 
 	@GetMapping("/")
@@ -107,4 +110,15 @@ public class IndexController {
 		return "redirect:/paintings/" + slug;
 	}
 
+	@GetMapping("/exhibitions")
+	String exhibitions(@RequestParam("page") Optional<Integer> page, Model model) {
+		int currentPage = page.orElse(1);
+		Page<Exhibition> exhibitionsPage = exhibitionService.findPaginated(currentPage - 1, 2);
+		List<Exhibition> listExhibitions = exhibitionsPage.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", exhibitionsPage.getTotalPages());
+		model.addAttribute("listExhibitions", listExhibitions);
+		model.addAttribute("module", "exhibitions");
+		return "exhibitions";
+	}
 }

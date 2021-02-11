@@ -173,7 +173,13 @@ public class AdminController {
 	}
 
 	@GetMapping("/exhibitions")
-	String exhibitions(Model model) {
+	String exhibitions(@RequestParam("page") Optional<Integer> page, Model model) {
+		int currentPage = page.orElse(1);
+		Page<Exhibition> exhibitionsPage = exhibitionService.findPaginated(currentPage - 1, 10);
+		List<Exhibition> listExhibitions = exhibitionsPage.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", exhibitionsPage.getTotalPages());
+		model.addAttribute("listExhibitions", listExhibitions);
 		model.addAttribute("module", "exhibitions");
 		return "admin/exhibitions";
 	}
@@ -208,6 +214,7 @@ public class AdminController {
 				exhibitionImage.setImageName(image.getOriginalFilename());
 				exhibitionImage.setImageType(image.getContentType());
 				exhibitionImage.setImageData(image.getBytes());
+				exhibitionImage.setExhibition(exhibition);
 				exhibitionImages.add(exhibitionImage);
 			}
 			exhibition.setImages(exhibitionImages);

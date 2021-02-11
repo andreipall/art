@@ -10,20 +10,20 @@
 		</div>
       	<a class="btn btn-success" href="new.html" th:href="@{/admin/exhibitions/new}"><i class="bi bi-pencil"></i> New</a>
       	<!-- Modal -->
-		<div class="modal fade" id="deletePainting" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal fade" id="deleteExhibition" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="modalLabel">Delete painting</h5>
+		        <h5 class="modal-title" id="modalLabel">Delete exhibition</h5>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
 		      <div class="modal-body">
-		        <strong>Are you sure you want to delete this painting:</strong><br>
+		        <strong>Are you sure you want to delete this exhibition:</strong><br>
 		        <h6 id="modalName"></h6>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		        <button type="button" id="confirmDeletePainting" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+		        <button type="button" id="confirmDeleteExhibition" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
 		      </div>
 		    </div>
 		  </div>
@@ -39,27 +39,27 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="painting : ${listPaintings}">
-              <td><a th:text="${painting.name}" th:href="@{/paintings/{slug}(slug=${painting.slug})}" target="_blank">Link</a></td>
-              <td th:text="${#strings.abbreviate(painting.description,200)}">Lorem</td>
-              <td><a th:href="@{/paintings/{slug}(slug=${painting.slug})}" class="btn btn-success" target="_blank">View</a></td>
-              <td><a th:href="@{/admin/paintings/{id}/edit(id=${painting.id})}" class="btn btn-primary">Edit</a></td>
-              <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePainting" th:attr="data-bs-painting-id=${painting.id}, data-bs-painting-name=${painting.name}">Delete</button></td>
+            <tr th:each="exhibition : ${listExhibitions}">
+              <td><a th:text="${exhibition.name}" th:href="@{/exhibitions/{slug}(slug=${exhibition.slug})}" target="_blank">Link</a></td>
+              <td th:text="${#strings.abbreviate(exhibition.description,200)}">Lorem</td>
+              <td><a th:href="@{/exhibitions/{slug}(slug=${exhibition.slug})}" class="btn btn-success" target="_blank">View</a></td>
+              <td><a th:href="@{/admin/exhibitions/{id}/edit(id=${exhibition.id})}" class="btn btn-primary">Edit</a></td>
+              <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteExhibition" th:attr="data-bs-exhibition-id=${exhibition.id}, data-bs-exhibition-name=${exhibition.name}">Delete</button></td>
             </tr>
           </tbody>
         </table>
         <nav aria-label="Page navigation example" th:if="${totalPages > 1}">
 		  <ul class="pagination justify-content-center">
 		    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
-		   	  <a class="page-link" href="#" th:if="${currentPage != 1}" th:href="@{'/admin/paintings?page=' + ${currentPage-1}}">Previous</a>
+		   	  <a class="page-link" href="#" th:if="${currentPage != 1}" th:href="@{'/admin/exhibitions?page=' + ${currentPage-1}}">Previous</a>
 		      <span class="page-link" th:if="${currentPage == 1}">Previous</span>
 		    </li>
 		    <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage ? 'active' : ''}" aria-current="page">
-		      <a class="page-link" href="#" th:if="${currentPage != i}" th:href="@{'/admin/paintings?page=' + ${i}}">[[${i}]]</a>
+		      <a class="page-link" href="#" th:if="${currentPage != i}" th:href="@{'/admin/exhibitions?page=' + ${i}}">[[${i}]]</a>
 		      <span class="page-link" th:unless="${currentPage != i}">[[${i}]]</span>
 		    </li>
 		    <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
-		      <a class="page-link" href="#" th:if="${currentPage != totalPages}" th:href="@{'/admin/paintings?page=' + ${currentPage+1}}">Next</a>
+		      <a class="page-link" href="#" th:if="${currentPage != totalPages}" th:href="@{'/admin/exhibitions?page=' + ${currentPage+1}}">Next</a>
 		      <span class="page-link" th:if="${currentPage == totalPages}">Next</span>
 		    </li>
 		  </ul>
