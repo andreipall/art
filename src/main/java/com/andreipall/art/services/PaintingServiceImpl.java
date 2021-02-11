@@ -73,9 +73,4 @@ public class PaintingServiceImpl implements PaintingService {
 		return this.paintingRepository.findTop6ByOrderByCreatedAtDesc();
 	}
 
-	@Override
-	public List<Painting> findLatest3Paintings() {
-		return this.paintingRepository.findTop3ByOrderByCreatedAtDesc();
-	}
-	
 }

@@ -10,5 +10,4 @@ import com.andreipall.art.entities.Painting;
 public interface PaintingRepository extends JpaRepository<Painting, Integer> {
 	Painting findBySlug(String slug);
 	public List<Painting> findTop6ByOrderByCreatedAtDesc();
-	public List<Painting> findTop3ByOrderByCreatedAtDesc();
 }

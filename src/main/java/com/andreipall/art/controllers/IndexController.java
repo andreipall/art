@@ -36,8 +36,6 @@ public class IndexController {
 
 	@GetMapping("/")
 	String home(Model model) {
-		List<Painting> carouselPaintings = paintingService.findLatest3Paintings();
-		model.addAttribute("carouselPaintings", carouselPaintings);
 		List<Painting> listPaintings = paintingService.findLatestPaintings();
 		model.addAttribute("listPaintings", listPaintings);
 		model.addAttribute("module", "home");

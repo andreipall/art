@@ -8,7 +8,6 @@ import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
 
 public interface PaintingService {
-	public abstract List<Painting> findLatest3Paintings();
 	public abstract List<Painting> findLatestPaintings();
 	public abstract Page<Painting> findPaginated(int pageNo, int pageSize);
 	public abstract Painting findById(int id);
