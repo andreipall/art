@@ -1,6 +1,7 @@
 package com.andreipall.art.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -18,12 +19,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.andreipall.art.dto.ExhibitionDTO;
 import com.andreipall.art.dto.PaintingDTO;
+import com.andreipall.art.entities.Exhibition;
+import com.andreipall.art.entities.ExhibitionImage;
 import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
+import com.andreipall.art.services.ExhibitionService;
 import com.andreipall.art.services.PaintingService;
 import com.andreipall.art.validator.CustomFileValidator;
+import com.andreipall.art.validator.CustomNewExhibitionValidator;
 import com.andreipall.art.validator.CustomPaintingValidator;
 import com.github.slugify.Slugify;
 
@@ -32,19 +40,24 @@ import com.github.slugify.Slugify;
 public class AdminController {
 	private CustomFileValidator customFileValidator;
 	private CustomPaintingValidator customPaintingValidator;
+	private CustomNewExhibitionValidator customNewExhibitionValidator;
 	private Slugify slugify;
 	private PaintingService paintingService;
+	private ExhibitionService exhibitionService;
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	public AdminController(CustomFileValidator customFileValidator, CustomPaintingValidator customPaintingValidator,
-			Slugify slugify, PaintingService paintingService) {
+			CustomNewExhibitionValidator customNewExhibitionValidator, Slugify slugify, PaintingService paintingService,
+			ExhibitionService exhibitionService) {
 		super();
 		this.customFileValidator = customFileValidator;
 		this.customPaintingValidator = customPaintingValidator;
+		this.customNewExhibitionValidator = customNewExhibitionValidator;
 		this.slugify = slugify;
 		this.paintingService = paintingService;
+		this.exhibitionService = exhibitionService;
 	}
 
 	@GetMapping()
@@ -142,7 +155,7 @@ public class AdminController {
 		redirectAttr.addFlashAttribute("message", "Painting edited.");
 		return "redirect:/admin/paintings";
 	}
-	
+
 	@DeleteMapping("/paintings/{id}")
 	ResponseEntity<?> deletePainting(@PathVariable int id) {
 		Painting painting = new Painting();
@@ -150,7 +163,7 @@ public class AdminController {
 		this.paintingService.deletePainting(painting);
 		return ResponseEntity.ok().build();
 	}
-	
+
 	@DeleteMapping("/paintings/{id}/comments/{commentId}")
 	ResponseEntity<?> deletePaintingComment(@PathVariable int id, @PathVariable int commentId) {
 		PaintingComment paintingComment = new PaintingComment();
@@ -163,5 +176,46 @@ public class AdminController {
 	String exhibitions(Model model) {
 		model.addAttribute("module", "exhibitions");
 		return "admin/exhibitions";
+	}
+
+	@GetMapping("/exhibitions/new")
+	String newExhibition(Model model) {
+		model.addAttribute("module", "exhibitions");
+		ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
+		model.addAttribute("exhibitionDTO", exhibitionDTO);
+		return "admin/newExhibition";
+	}
+
+	@PostMapping("/exhibitions/new")
+	String saveExhibition(@Valid ExhibitionDTO exhibitionDTO, BindingResult bindingResult,
+			RedirectAttributes redirectAttr) {
+		customNewExhibitionValidator.validate(exhibitionDTO, bindingResult);
+		if (bindingResult.hasErrors()) {
+			return "admin/newExhibition";
+		}
+
+		try {
+			Exhibition exhibition = new Exhibition();
+			exhibition.setName(exhibitionDTO.getName());
+			exhibition.setSlug(this.slugify.slugify(exhibitionDTO.getName()));
+			exhibition.setDescription(exhibitionDTO.getDescription());
+			exhibition.setImageName(exhibitionDTO.getImage().getOriginalFilename());
+			exhibition.setImageType(exhibitionDTO.getImage().getContentType());
+			exhibition.setImageData(exhibitionDTO.getImage().getBytes());
+			List<ExhibitionImage> exhibitionImages = new ArrayList<>();
+			for(MultipartFile image : exhibitionDTO.getImages()) {
+				ExhibitionImage exhibitionImage = new ExhibitionImage();
+				exhibitionImage.setImageName(image.getOriginalFilename());
+				exhibitionImage.setImageType(image.getContentType());
+				exhibitionImage.setImageData(image.getBytes());
+				exhibitionImages.add(exhibitionImage);
+			}
+			exhibition.setImages(exhibitionImages);
+			exhibitionService.addExhibition(exhibition);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		redirectAttr.addFlashAttribute("message", "Exhibition added.");
+		return "redirect:/admin/exhibitions";
 	}
 }
