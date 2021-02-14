@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="standardLayout :: page(title='Pall Andrei - Home')">
 
 <div th:fragment="content">
-  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" th:if="${#arrays.length(listPaintings) >= 3}">
     <ol class="carousel-indicators">
       <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
       <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>

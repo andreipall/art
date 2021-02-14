@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="standardLayout :: page(title='Pall Andrei - Blog')">
+
+<div th:fragment="content">
+
+
+  <div class="row">
+    <!-- Blog Entries Column -->
+      <div class="col-lg-8">
+
+		<!-- Title -->
+        <h1 class="mt-4" th:text="${name}">Post Title</h1>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Posted on <span th:text="|${#calendars.format(createdAt, 'EEEE, dd MMMMM yyyy')} at ${#calendars.format(createdAt, 'HH:mm')}|"></span></p>
+
+        <hr>
+
+        <!-- Post Content -->
+        <div class="exhibition-description" th:text="${description}"></div>
+		
+        <!-- Preview Image -->
+        <img class="img-fluid rounded exhibition-image" src="http://placehold.it/900x300" th:each="image : ${images}" th:src="@{|/exhibitions/${slug}/images/${image.imageName}|}" alt="exhibition">
+        <br>
+      </div>
+
+    <div th:replace="fragments/sidebar :: sidebar(module=${module})">sidebar</div>
+
+  </div><!-- /.row -->
+
+
+
+</div><!-- /.container -->

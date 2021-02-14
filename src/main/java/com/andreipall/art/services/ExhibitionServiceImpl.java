@@ -8,18 +8,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import com.andreipall.art.entities.Exhibition;
+import com.andreipall.art.entities.ExhibitionImage;
+import com.andreipall.art.repositories.ExhibitionImageRepository;
 import com.andreipall.art.repositories.ExhibitionRepository;
 
 @Service
 public class ExhibitionServiceImpl implements ExhibitionService {
 	private final ExhibitionRepository exhibitionRepository;
+	private final ExhibitionImageRepository exhibitionImageRepository;
 
 	@Autowired
-	public ExhibitionServiceImpl(ExhibitionRepository exhibitionRepository) {
+	public ExhibitionServiceImpl(ExhibitionRepository exhibitionRepository, ExhibitionImageRepository exhibitionImageRepository) {
 		super();
 		this.exhibitionRepository = exhibitionRepository;
+		this.exhibitionImageRepository = exhibitionImageRepository;
 	}
 
 	@Override
@@ -58,6 +61,11 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 	@Override
 	public List<Exhibition> findLatestExhibitions() {
 		return this.exhibitionRepository.findTop3ByOrderByCreatedAtDesc();
+	}
+
+	@Override
+	public ExhibitionImage findExhibitionImage(String slug, String imageName) {
+		return this.exhibitionImageRepository.findByExhibition_SlugAndImageName(slug, imageName);
 	}
 
 }

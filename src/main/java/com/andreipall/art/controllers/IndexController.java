@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.andreipall.art.dto.CommentDTO;
 import com.andreipall.art.entities.Exhibition;
+import com.andreipall.art.entities.ExhibitionImage;
 import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
 import com.andreipall.art.services.ExhibitionService;
@@ -100,7 +101,7 @@ public class IndexController {
 			model.addAttribute("module", "paintings");
 			return "painting";
 		}
-		
+
 		PaintingComment paintingComment = new PaintingComment();
 		paintingComment.setPainting(painting);
 		paintingComment.setName(commentDTO.getName());
@@ -108,6 +109,23 @@ public class IndexController {
 		paintingService.addPaintingComment(paintingComment);
 		redirectAttr.addFlashAttribute("message", "Comment added.");
 		return "redirect:/paintings/" + slug;
+	}
+
+	@GetMapping("/exhibitions/{slug}/{name}")
+	void exhibitionImage(@PathVariable String slug, HttpServletResponse response) throws IOException {
+		Exhibition exhibitionImage = this.exhibitionService.findBySlug(slug);
+		response.setContentType(exhibitionImage.getImageType());
+		InputStream is = new ByteArrayInputStream(exhibitionImage.getImageData());
+		IOUtils.copy(is, response.getOutputStream());
+	}
+
+	@GetMapping("/exhibitions/{slug}/images/{name}")
+	void exhibitionImages(@PathVariable String slug, @PathVariable String name, HttpServletResponse response)
+			throws IOException {
+		ExhibitionImage exhibitionImage = this.exhibitionService.findExhibitionImage(slug, name);
+		response.setContentType(exhibitionImage.getImageType());
+		InputStream is = new ByteArrayInputStream(exhibitionImage.getImageData());
+		IOUtils.copy(is, response.getOutputStream());
 	}
 
 	@GetMapping("/exhibitions")
@@ -120,5 +138,17 @@ public class IndexController {
 		model.addAttribute("listExhibitions", listExhibitions);
 		model.addAttribute("module", "exhibitions");
 		return "exhibitions";
+	}
+
+	@GetMapping("/exhibitions/{slug}")
+	String exhibition(@PathVariable String slug, Model model) {
+		Exhibition exhibition = this.exhibitionService.findBySlug(slug);
+		model.addAttribute("name", exhibition.getName());
+		model.addAttribute("slug", exhibition.getSlug());
+		model.addAttribute("description", exhibition.getDescription());
+		model.addAttribute("images", exhibition.getImages());
+		model.addAttribute("createdAt", exhibition.getCreatedAt());
+		model.addAttribute("module", "exhibitions");
+		return "exhibition";
 	}
 }

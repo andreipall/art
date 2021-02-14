@@ -231,3 +231,15 @@ main {
   width:100%; 
   height: 200px;
 }
+.exhibition {
+  object-fit: cover; 
+  object-position: center; 
+  width:100%; 
+  height: 300px;
+}
+.exhibition-description {
+	margin-bottom: 20px;
+}
+.exhibition-image {
+	margin-bottom: 10px;
+}
