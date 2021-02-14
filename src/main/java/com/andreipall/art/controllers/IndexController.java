@@ -42,6 +42,8 @@ public class IndexController {
 	String home(Model model) {
 		List<Painting> listPaintings = paintingService.findLatestPaintings();
 		model.addAttribute("listPaintings", listPaintings);
+		List<Exhibition> listExhibition = exhibitionService.findLatestExhibitions();
+		model.addAttribute("listExhibitions", listExhibition);
 		model.addAttribute("module", "home");
 		return "index";
 	}

@@ -30,6 +30,7 @@ import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
 import com.andreipall.art.services.ExhibitionService;
 import com.andreipall.art.services.PaintingService;
+import com.andreipall.art.validator.CustomExhibitionValidator;
 import com.andreipall.art.validator.CustomFileValidator;
 import com.andreipall.art.validator.CustomNewExhibitionValidator;
 import com.andreipall.art.validator.CustomPaintingValidator;
@@ -41,6 +42,7 @@ public class AdminController {
 	private CustomFileValidator customFileValidator;
 	private CustomPaintingValidator customPaintingValidator;
 	private CustomNewExhibitionValidator customNewExhibitionValidator;
+	private CustomExhibitionValidator customExhibitionValidator;
 	private Slugify slugify;
 	private PaintingService paintingService;
 	private ExhibitionService exhibitionService;
@@ -49,12 +51,13 @@ public class AdminController {
 
 	@Autowired
 	public AdminController(CustomFileValidator customFileValidator, CustomPaintingValidator customPaintingValidator,
-			CustomNewExhibitionValidator customNewExhibitionValidator, Slugify slugify, PaintingService paintingService,
+			CustomNewExhibitionValidator customNewExhibitionValidator, CustomExhibitionValidator customExhibitionValidator, Slugify slugify, PaintingService paintingService,
 			ExhibitionService exhibitionService) {
 		super();
 		this.customFileValidator = customFileValidator;
 		this.customPaintingValidator = customPaintingValidator;
 		this.customNewExhibitionValidator = customNewExhibitionValidator;
+		this.customExhibitionValidator = customExhibitionValidator;
 		this.slugify = slugify;
 		this.paintingService = paintingService;
 		this.exhibitionService = exhibitionService;
@@ -224,5 +227,72 @@ public class AdminController {
 		}
 		redirectAttr.addFlashAttribute("message", "Exhibition added.");
 		return "redirect:/admin/exhibitions";
+	}
+	
+	@GetMapping("/exhibitions/{id}/edit")
+	String editExhibition(@PathVariable int id, Model model) {
+		Exhibition exhibition = this.exhibitionService.findById(id);
+		model.addAttribute("module", "exhibitions");
+		ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
+		exhibitionDTO.setName(exhibition.getName());
+		exhibitionDTO.setDescription(exhibition.getDescription());
+		model.addAttribute("id", id);
+		model.addAttribute("slug", exhibition.getSlug());
+		model.addAttribute("image", exhibition.getImageName());
+		model.addAttribute("exhibitionDTO", exhibitionDTO);
+		model.addAttribute("images", exhibition.getImages());
+		return "admin/editExhibition";
+	}
+	
+	@PostMapping("/exhibitions/{id}/edit")
+	String saveEditedExhibition(@PathVariable int id, @Valid ExhibitionDTO exhibitionDTO, BindingResult bindingResult,
+			RedirectAttributes redirectAttr, Model model) {
+		Exhibition exhibition = this.exhibitionService.findById(id);
+		customExhibitionValidator.validate(exhibitionDTO, bindingResult);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("module", "exhibitions");
+			model.addAttribute("id", id);
+			model.addAttribute("slug", exhibition.getSlug());
+			model.addAttribute("image", exhibition.getImageName());
+			model.addAttribute("exhibitionDTO", exhibitionDTO);
+			model.addAttribute("images", exhibition.getImages());
+			return "admin/editExhibition";
+		}
+
+		try {
+			exhibition.setName(exhibitionDTO.getName());
+			exhibition.setSlug(this.slugify.slugify(exhibitionDTO.getName()));
+			exhibition.setDescription(exhibitionDTO.getDescription());
+			if (!exhibitionDTO.getImage().isEmpty()) {
+				exhibition.setImageName(exhibitionDTO.getImage().getOriginalFilename());
+				exhibition.setImageType(exhibitionDTO.getImage().getContentType());
+				exhibition.setImageData(exhibitionDTO.getImage().getBytes());
+			}
+			if (exhibitionDTO.getImages().length != 0) {
+				List<ExhibitionImage> exhibitionImages = new ArrayList<>();
+				for(MultipartFile image : exhibitionDTO.getImages()) {
+					ExhibitionImage exhibitionImage = new ExhibitionImage();
+					exhibitionImage.setImageName(image.getOriginalFilename());
+					exhibitionImage.setImageType(image.getContentType());
+					exhibitionImage.setImageData(image.getBytes());
+					exhibitionImage.setExhibition(exhibition);
+					exhibitionImages.add(exhibitionImage);
+				}
+				exhibition.setImages(exhibitionImages);
+			}
+			exhibitionService.saveExhibition(exhibition);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		redirectAttr.addFlashAttribute("message", "Exhibition edited.");
+		return "redirect:/admin/exhibitions";
+	}
+	
+	@DeleteMapping("/exhibitions/{id}")
+	ResponseEntity<?> deleteExhibition(@PathVariable int id) {
+		Exhibition exhibition = new Exhibition();
+		exhibition.setId(id);
+		this.exhibitionService.deleteExhibition(exhibition);
+		return ResponseEntity.ok().build();
 	}
 }

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="admin/standardLayout" th:include="admin/standardLayout :: page(title='Pall Andrei - Admin')">
+
+    <div th:fragment="content">
+      <h2>Edit exhibition</h2>
+      <div class="table-responsive">
+		<form th:action="@{|/admin/exhibitions/${id}/edit|}" th:object="${exhibitionDTO}" method="post" enctype="multipart/form-data">
+          <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+			  Please correct errors below
+		  </div>
+		  <div class="mb-3">
+		    <label for="name" class="form-label">Name</label>
+		    <input type="text" name="name" th:field="*{name}" class="form-control" id="name" aria-describedby="nameError">
+		    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" id="nameError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <label for="description" class="form-label">Description</label>
+		    <textarea name="description" th:field="*{description}" class="form-control" id="description" rows="4" cols="50" aria-describedby="descriptionError"></textarea>
+		    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" id="descriptionError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/exhibitions/${slug}/${image}|}" alt="exhibition" style="height: 200px;"><br>
+		  </div>
+		  <div class="mb-3">
+		    <label for="image" class="form-label">Main image</label>
+		    <input type="file" name="image" th:field="*{image}" class="form-control" id="image" aria-describedby="imageError">
+		    <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" id="imageError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <img class="img-fluid rounded" src="http://placehold.it/900x300" th:each="image : ${images}" th:src="@{|/exhibitions/${slug}/images/${image.imageName}|}" alt="exhibition" style="height: 200px;">
+		  </div>
+		  <div class="mb-3">
+		    <label for="images" class="form-label">Images</label>
+		    <input type="file" name="images" th:field="*{images}" class="form-control" id="images" aria-describedby="imagesError" multiple>
+		    <div th:if="${#fields.hasErrors('images')}" th:errors="*{images}" id="imagesError" class="form-text error">Error</div>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form><br>
+      </div>
+    </div>
+</html>

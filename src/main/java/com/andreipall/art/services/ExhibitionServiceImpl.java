@@ -60,7 +60,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
 	@Override
 	public List<Exhibition> findLatestExhibitions() {
-		return this.exhibitionRepository.findTop3ByOrderByCreatedAtDesc();
+		return this.exhibitionRepository.findTop2ByOrderByCreatedAtDesc();
 	}
 
 	@Override

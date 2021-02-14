@@ -75,42 +75,30 @@
     <!-- START THE FEATURETTES -->
 
     <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5 order-md-1">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-
-      </div>
+	<div id="exhibitions" th:if="${#arrays.length(listExhibitions) >= 2}">
+	    <div class="row featurette">
+	      <div class="col-md-7">
+	        <h2 class="featurette-heading" th:text="${listExhibitions[0].name}">First featurette heading</h2>
+	        <p class="lead" th:text="${#strings.abbreviate(listExhibitions[0].description,600)}">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+	        <a href="#" class="btn btn-primary" th:href="@{/exhibitions/{slug}(slug=${listExhibitions[0].slug})}">View details &raquo;</a>
+	      </div>
+	      <div class="col-md-5">
+	        <a th:href="@{/exhibitions/{slug}(slug=${listExhibitions[0].slug})}" style="text-align: center;"><img class="card-img-top home-exhibition" src="http://placehold.it/900x300" th:src="@{|/exhibitions/${listExhibitions[0].slug}/${listExhibitions[0].imageName}|}" alt="exhibition"></a>
+	      </div>
+	    </div>
+	
+	    <hr class="featurette-divider">
+	
+	    <div class="row featurette">
+	      <div class="col-md-7 order-md-2">
+	        <h2 class="featurette-heading" th:text="${listExhibitions[1].name}">Oh yeah, it’s that good.</h2>
+	        <p class="lead" th:text="${#strings.abbreviate(listExhibitions[1].description,600)}">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+	        <a href="#" class="btn btn-primary" th:href="@{/exhibitions/{slug}(slug=${listExhibitions[1].slug})}">View details &raquo;</a>
+	      </div>
+	      <div class="col-md-5 order-md-1">
+	        <a th:href="@{/exhibitions/{slug}(slug=${listExhibitions[1].slug})}" style="text-align: center;"><img class="card-img-top home-exhibition" src="http://placehold.it/900x300" th:src="@{|/exhibitions/${listExhibitions[1].slug}/${listExhibitions[1].imageName}|}" alt="exhibition"></a>
+	      </div>
+	    </div>
     </div>
 	<br>
     <!-- /END THE FEATURETTES -->

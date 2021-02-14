@@ -2,7 +2,6 @@ package com.andreipall.art.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -105,9 +104,14 @@ public class Exhibition extends DateAudit {
 	public List<ExhibitionImage> getImages() {
 		return images;
 	}
+	
+	public void addAll(List<ExhibitionImage> images) {
+		this.images.addAll(images);
+	}
 
 	public void setImages(List<ExhibitionImage> images) {
-		this.images = images;
+		this.images.clear();
+		this.images.addAll(images);
 	}
 
 }

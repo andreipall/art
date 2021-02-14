@@ -8,5 +8,5 @@ import com.andreipall.art.entities.Exhibition;
 @Repository
 public interface ExhibitionRepository extends JpaRepository<Exhibition, Integer> {
 	public Exhibition findBySlug(String slug);
-	public List<Exhibition> findTop3ByOrderByCreatedAtDesc();
+	public List<Exhibition> findTop2ByOrderByCreatedAtDesc();
 }

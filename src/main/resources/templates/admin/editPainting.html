@@ -10,9 +10,6 @@
 			  Please correct errors below
 		  </div>
 		  <div class="mb-3">
-		    <img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/paintings/${slug}/${image}|}" alt="painting" style="height: 200px;"><br>
-		  </div>
-		  <div class="mb-3">
 		    <label for="name" class="form-label">Name</label>
 		    <input type="text" name="name" th:field="*{name}" class="form-control" id="name" aria-describedby="nameError">
 		    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" id="nameError" class="form-text error">Error</div>
@@ -21,6 +18,9 @@
 		    <label for="description" class="form-label">Description</label>
 		    <textarea name="description" th:field="*{description}" class="form-control" id="description" rows="4" cols="50" aria-describedby="descriptionError"></textarea>
 		    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" id="descriptionError" class="form-text error">Error</div>
+		  </div>
+		  <div class="mb-3">
+		    <img class="img-fluid rounded" src="http://placehold.it/900x300" th:src="@{|/paintings/${slug}/${image}|}" alt="painting" style="height: 200px;"><br>
 		  </div>
 		  <div class="mb-3">
 		    <label for="image" class="form-label">Image</label>
