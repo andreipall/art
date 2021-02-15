@@ -153,4 +153,24 @@ public class IndexController {
 		model.addAttribute("module", "exhibitions");
 		return "exhibition";
 	}
+	
+	@GetMapping("/about-me")
+	String aboutMe(Model model) {
+		model.addAttribute("module", "about-me");
+		return "aboutMe";
+	}
+	
+	@GetMapping("/contact")
+	String contact(Model model) {
+		model.addAttribute("module", "contact");
+		return "contact";
+	}
+	
+	@GetMapping("/search")
+    public String search(Model model, @RequestParam("keyword") String keyword) {
+        List<Painting> listPaintings = paintingService.listAll(keyword);
+        model.addAttribute("listPaintings", listPaintings);
+        model.addAttribute("keyword", keyword);
+        return "search";
+    }
 }

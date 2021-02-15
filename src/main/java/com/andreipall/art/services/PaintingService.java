@@ -17,4 +17,5 @@ public interface PaintingService {
 	public abstract void deletePaintingComment(PaintingComment paintingComment);
 	public abstract void savePainting(Painting painting);
 	public abstract void deletePainting(Painting painting);
+	public abstract List<Painting> listAll(String keyword);
 }
