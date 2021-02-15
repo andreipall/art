@@ -64,9 +64,15 @@ public class AdminController {
 	}
 
 	@GetMapping()
-	String home(Model model) {
-		model.addAttribute("module", "dashboard");
-		return "admin/index";
+	String home(@RequestParam("page") Optional<Integer> page, Model model) {
+		int currentPage = page.orElse(1);
+		Page<Painting> paintingsPage = paintingService.findPaginated(currentPage - 1, 10);
+		List<Painting> listPaintings = paintingsPage.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", paintingsPage.getTotalPages());
+		model.addAttribute("listPaintings", listPaintings);
+		model.addAttribute("module", "paintings");
+		return "admin/paintings";
 	}
 
 	@GetMapping("/paintings")

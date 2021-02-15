@@ -33,11 +33,6 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" th:classappend="${module == 'dashboard' ? 'active' : ''}" aria-current="page" href="#" th:href="@{/admin}">
-              <i class="bi bi-house-door"></i> Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" th:classappend="${module == 'paintings' ? 'active' : ''}" href="#" th:href="@{/admin/paintings}">
               <i class="bi bi-palette"></i> Paintings
             </a>
