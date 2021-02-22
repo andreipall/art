@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.andreipall.art.dto.CommentDTO;
+import com.andreipall.art.dto.ContactDTO;
 import com.andreipall.art.entities.Exhibition;
 import com.andreipall.art.entities.ExhibitionImage;
 import com.andreipall.art.entities.Painting;
@@ -153,24 +154,37 @@ public class IndexController {
 		model.addAttribute("module", "exhibitions");
 		return "exhibition";
 	}
-	
+
 	@GetMapping("/about-me")
 	String aboutMe(Model model) {
 		model.addAttribute("module", "about-me");
 		return "aboutMe";
 	}
-	
+
 	@GetMapping("/contact")
 	String contact(Model model) {
+		ContactDTO contactDTO = new ContactDTO();
+		model.addAttribute("contactDTO", contactDTO);
 		model.addAttribute("module", "contact");
 		return "contact";
 	}
-	
+
+	@PostMapping("/contact")
+	String contactSent(@Valid ContactDTO contactDTO, BindingResult bindingResult, RedirectAttributes redirectAttr,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("contactDTO", contactDTO);
+			model.addAttribute("module", "contact");
+			return "contact";
+		}
+		return "redirect:/contacted";
+	}
+
 	@GetMapping("/search")
-    public String search(Model model, @RequestParam("keyword") String keyword) {
-        List<Painting> listPaintings = paintingService.listAll(keyword);
-        model.addAttribute("listPaintings", listPaintings);
-        model.addAttribute("keyword", keyword);
-        return "search";
-    }
+	public String search(Model model, @RequestParam("keyword") String keyword) {
+		List<Painting> listPaintings = paintingService.listAll(keyword);
+		model.addAttribute("listPaintings", listPaintings);
+		model.addAttribute("keyword", keyword);
+		return "search";
+	}
 }

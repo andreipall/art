@@ -25,6 +25,26 @@
 <p>Donec euismod ipsum ut est auctor, eget blandit lacus sodales. Ut auctor facilisis turpis. Vestibulum eu accumsan dolor. Ut augue risus, placerat at magna et, iaculis rhoncus tellus. Nam interdum, mauris in pretium congue, est risus pretium nulla, eget scelerisque sapien nulla sed magna. Sed quis metus nec orci euismod feugiat. Aliquam vitae justo eget enim tempor porttitor quis quis felis. Integer scelerisque molestie arcu, quis egestas odio blandit id. Mauris metus eros, convallis pulvinar dolor nec, cursus malesuada lacus. Aliquam elementum venenatis interdum. Nullam eleifend facilisis nulla eu porta.</p>
 
 <p>Donec eget dolor in arcu vehicula tincidunt ac quis quam. Nulla eleifend vel orci eget volutpat. Aenean hendrerit dolor quam, quis fringilla leo efficitur a. Suspendisse in arcu id justo malesuada varius. Vivamus non consequat eros, nec sodales lectus. Integer elementum posuere mollis. Etiam quis egestas velit. Cras porttitor eu nisl non posuere. Nulla malesuada sagittis vulputate. Vivamus ac lorem nec libero malesuada ornare. Mauris at varius justo, vel consectetur lorem. Sed posuere, justo nec congue tristique, ipsum ante molestie eros, tristique iaculis enim leo eget arcu. </p>
+			<form action="" th:object="${contactDTO}" method="post">
+              <div class="mb-3">
+			    <label for="name" class="form-label">Name</label>
+			    <input type="text" class="form-control" id="name" name="name" th:field="*{name}">
+			    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" id="nameError" class="form-text error">Error</div>
+			  </div>
+			  <div class="mb-3">
+			    <label for="email" class="form-label">Email</label>
+			    <input type="email" class="form-control" id="email" name="email" th:field="*{email}">
+			    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" id="emailError" class="form-text error">Error</div>
+			  </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" class="form-control" rows="5" name="message" th:field="*{message}"></textarea>
+                <div th:if="${#fields.hasErrors('message')}" th:errors="*{message}" id="messageError" class="form-text error">Error</div>
+              </div>
+              <div class="mb-3">
+              	<button type="submit" class="btn btn-primary">Send</button>
+              </div>
+            </form>
 		<br>
 		</div>
 
