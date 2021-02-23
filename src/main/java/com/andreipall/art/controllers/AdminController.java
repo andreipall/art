@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.andreipall.art.dto.ExhibitionDTO;
 import com.andreipall.art.dto.PaintingDTO;
+import com.andreipall.art.dto.UserDTO;
 import com.andreipall.art.entities.Exhibition;
 import com.andreipall.art.entities.ExhibitionImage;
 import com.andreipall.art.entities.Painting;
@@ -300,5 +301,24 @@ public class AdminController {
 		exhibition.setId(id);
 		this.exhibitionService.deleteExhibition(exhibition);
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/users/new")
+	String newUser(Model model) {
+		model.addAttribute("module", "users");
+		UserDTO userDTO = new UserDTO();
+		model.addAttribute("userDTO", userDTO);
+		return "admin/newUser";
+	}
+
+	@PostMapping("/users/new")
+	String saveUser(@Valid UserDTO paintingDTO, BindingResult bindingResult, RedirectAttributes redirectAttr) {
+		if (bindingResult.hasErrors()) {
+			return "admin/newUser";
+		}
+
+		
+		redirectAttr.addFlashAttribute("message", "User added.");
+		return "redirect:/admin/users";
 	}
 }

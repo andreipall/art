@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,12 +34,17 @@ import com.andreipall.art.services.PaintingService;
 public class IndexController {
 	private PaintingService paintingService;
 	private ExhibitionService exhibitionService;
+	private JavaMailSender javaMailSender;
+	@Value("${com.andreipall.art.destination-email}")
+	private String destinationEmail;
 
 	@Autowired
-	public IndexController(PaintingService paintingService, ExhibitionService exhibitionService) {
+	public IndexController(PaintingService paintingService, ExhibitionService exhibitionService,
+			JavaMailSender javaMailSender) {
 		super();
 		this.paintingService = paintingService;
 		this.exhibitionService = exhibitionService;
+		this.javaMailSender = javaMailSender;
 	}
 
 	@GetMapping("/")
@@ -177,7 +185,17 @@ public class IndexController {
 			model.addAttribute("module", "contact");
 			return "contact";
 		}
-		return "redirect:/contacted";
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(destinationEmail);
+
+		msg.setSubject("New website contact message");
+		String message = "From: " + contactDTO.getName() + "\nEmail: " + contactDTO.getEmail() + "\nMessage: "
+				+ contactDTO.getMessage();
+		msg.setText(message);
+
+		javaMailSender.send(msg);
+		redirectAttr.addFlashAttribute("message", "Thanks for contacting me! I will be in touch with you shortly.");
+		return "redirect:/contact";
 	}
 
 	@GetMapping("/search")
