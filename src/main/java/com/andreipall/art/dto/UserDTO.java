@@ -2,22 +2,28 @@ package com.andreipall.art.dto;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.andreipall.art.validator.PasswordsMatch;
+
+@PasswordsMatch
 public class UserDTO {
 	@NotEmpty
 	private String username;
 	@NotEmpty
 	private String password;
+	@NotEmpty(message = "password confirmation is required.")
+	private String passwordConfirmation;
 	private String role;
-	private boolean enabled;
+	private boolean enabled = true;
 
 	public UserDTO() {
 		super();
 	}
 
-	public UserDTO(@NotEmpty String username, @NotEmpty String password, String role, boolean enabled) {
+	public UserDTO(String username, String password, String passwordConfirmation, String role, boolean enabled) {
 		super();
 		this.username = username;
 		this.password = password;
+		this.passwordConfirmation = passwordConfirmation;
 		this.role = role;
 		this.enabled = enabled;
 	}
@@ -36,6 +42,14 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPasswordConfirmation() {
+		return passwordConfirmation;
+	}
+
+	public void setPasswordConfirmation(String passwordConfirmation) {
+		this.passwordConfirmation = passwordConfirmation;
 	}
 
 	public String getRole() {

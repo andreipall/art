@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="admin/standardLayout" th:include="admin/standardLayout :: page(title='Pall Andrei - Admin')">
+
+    <div th:fragment="content">
+      <h2>Users</h2>
+      <div class="table-responsive">
+      	<div th:if="${message}" th:text="${message}" class="alert alert-success" role="alert">
+		  A simple success alert—check it out!
+		</div>
+      	<a class="btn btn-success" href="new.html" th:href="@{/admin/users/new}"><i class="bi bi-pencil"></i> New</a>
+      	<!-- Modal -->
+		<div class="modal fade" id="deleteUser" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modalLabel">Delete user</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <strong>Are you sure you want to delete this user:</strong><br>
+		        <h6 id="modalName"></h6>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		        <button type="button" id="confirmDeleteUser" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+        <table id="users-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th width="250">Username</th>
+              <th>Role</th>
+              <th>Enabled</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${listUsers}">
+              <td th:text="${user.username}">Username</td>
+              <td th:text="${user.role}">Role</td>
+              <td th:text="${user.enabled}">Lorem</td>
+              <td><a th:href="@{/admin/users/{id}/edit(id=${user.id})}" class="btn btn-primary">Edit</a></td>
+              <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUser" th:attr="data-bs-user-id=${user.id}, data-bs-user-username=${user.username}">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example" th:if="${totalPages > 1}">
+		  <ul class="pagination justify-content-center">
+		    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+		   	  <a class="page-link" href="#" th:if="${currentPage != 1}" th:href="@{'/admin/users?page=' + ${currentPage-1}}">Previous</a>
+		      <span class="page-link" th:if="${currentPage == 1}">Previous</span>
+		    </li>
+		    <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage ? 'active' : ''}" aria-current="page">
+		      <a class="page-link" href="#" th:if="${currentPage != i}" th:href="@{'/admin/users?page=' + ${i}}">[[${i}]]</a>
+		      <span class="page-link" th:unless="${currentPage != i}">[[${i}]]</span>
+		    </li>
+		    <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
+		      <a class="page-link" href="#" th:if="${currentPage != totalPages}" th:href="@{'/admin/users?page=' + ${currentPage+1}}">Next</a>
+		      <span class="page-link" th:if="${currentPage == totalPages}">Next</span>
+		    </li>
+		  </ul>
+		</nav>
+      </div>
+    </div>
+    <th:block layout:fragment="script"><script th:src="@{/js/admin/users.js}"></script></th:block>
+</html>

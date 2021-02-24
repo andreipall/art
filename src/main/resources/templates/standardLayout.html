@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="page(title)">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="page(title)">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +26,10 @@
       <div class="col-4 text-center">
         <a class="blog-header-logo text-dark" href="#">Pall Andrei</a>
       </div>
-      <div class="col-4 d-flex justify-content-end align-items-center">
+      <div class="col-4 d-flex justify-content-end align-items-center" sec:authorize="isAuthenticated()">
+        <a class="btn btn-sm btn-outline-secondary" href="#" th:href="@{/logout}">Logout</a>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center" sec:authorize="isAnonymous()">
         <a class="btn btn-sm btn-outline-secondary" href="#" th:href="@{/login}">Login</a>
       </div>
     </div>
@@ -77,41 +80,33 @@
       <small class="d-block mb-3 text-muted">© 2019-<span th:text="${#dates.year(#dates.createNow())}">2020</span> Pall Andrei</small>
     </div>
     <div class="col-6 col-md">
-      <h5>Features</h5>
-      <ul class="list-unstyled text-small">
-        <li><a class="link-secondary" href="#">Cool stuff</a></li>
-        <li><a class="link-secondary" href="#">Random feature</a></li>
-        <li><a class="link-secondary" href="#">Team feature</a></li>
-        <li><a class="link-secondary" href="#">Stuff for developers</a></li>
-        <li><a class="link-secondary" href="#">Another one</a></li>
-        <li><a class="link-secondary" href="#">Last time</a></li>
-      </ul>
-    </div>
-    <div class="col-6 col-md">
-      <h5>Resources</h5>
-      <ul class="list-unstyled text-small">
-        <li><a class="link-secondary" href="#">Resource name</a></li>
-        <li><a class="link-secondary" href="#">Resource</a></li>
-        <li><a class="link-secondary" href="#">Another resource</a></li>
-        <li><a class="link-secondary" href="#">Final resource</a></li>
-      </ul>
-    </div>
-    <div class="col-6 col-md">
-      <h5>Resources</h5>
-      <ul class="list-unstyled text-small">
-        <li><a class="link-secondary" href="#">Business</a></li>
-        <li><a class="link-secondary" href="#">Education</a></li>
-        <li><a class="link-secondary" href="#">Government</a></li>
-        <li><a class="link-secondary" href="#">Gaming</a></li>
-      </ul>
-    </div>
-    <div class="col-6 col-md">
       <h5>About</h5>
       <ul class="list-unstyled text-small">
-        <li><a class="link-secondary" href="#">Team</a></li>
-        <li><a class="link-secondary" href="#">Locations</a></li>
         <li><a class="link-secondary" href="#">Privacy</a></li>
         <li><a class="link-secondary" href="#">Terms</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>Resources</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="link-secondary" href="#" th:href="@{/paintings}">Paintings</a></li>
+        <li><a class="link-secondary" href="#" th:href="@{/exhibitions}">Exhibitions</a></li>
+        <li><a class="link-secondary" href="#" th:href="@{/about-me}">About me</a></li>
+        <li><a class="link-secondary" href="#" th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </div>
+    
+    <div class="col-6 col-md">
+      <h5>Other painters</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="link-secondary" href="#">Team</a></li>
+      </ul>
+    </div>
+    
+    <div class="col-6 col-md">
+      <h5>Web development</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="link-secondary" href="https://andreipall.github.io" target="_blank">Andrei Pall</a></li>
       </ul>
     </div>
   </div>

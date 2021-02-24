@@ -130,3 +130,24 @@ li.nav-item a i {
 .error {
   color: red;
 }
+#paintings-table td:nth-child(1) {  
+  width: 20%;
+}
+#paintings-table td:nth-child(2) {  
+  width: 70%;
+}
+#exhibitions-table td:nth-child(1) {  
+  width: 20%;
+}
+#exhibitions-table td:nth-child(2) {  
+  width: 70%;
+}
+#users-table td:nth-child(1) {  
+  width: 30%;
+}
+#users-table td:nth-child(2) {  
+  width: 30%;
+}
+#users-table td:nth-child(3) {  
+  width: 30%;
+}

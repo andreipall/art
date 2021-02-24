@@ -29,8 +29,10 @@ import com.andreipall.art.entities.Exhibition;
 import com.andreipall.art.entities.ExhibitionImage;
 import com.andreipall.art.entities.Painting;
 import com.andreipall.art.entities.PaintingComment;
+import com.andreipall.art.entities.User;
 import com.andreipall.art.services.ExhibitionService;
 import com.andreipall.art.services.PaintingService;
+import com.andreipall.art.services.UserService;
 import com.andreipall.art.validator.CustomExhibitionValidator;
 import com.andreipall.art.validator.CustomFileValidator;
 import com.andreipall.art.validator.CustomNewExhibitionValidator;
@@ -47,13 +49,15 @@ public class AdminController {
 	private Slugify slugify;
 	private PaintingService paintingService;
 	private ExhibitionService exhibitionService;
+	private UserService userService;
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	public AdminController(CustomFileValidator customFileValidator, CustomPaintingValidator customPaintingValidator,
-			CustomNewExhibitionValidator customNewExhibitionValidator, CustomExhibitionValidator customExhibitionValidator, Slugify slugify, PaintingService paintingService,
-			ExhibitionService exhibitionService) {
+			CustomNewExhibitionValidator customNewExhibitionValidator,
+			CustomExhibitionValidator customExhibitionValidator, Slugify slugify, PaintingService paintingService,
+			ExhibitionService exhibitionService, UserService userService) {
 		super();
 		this.customFileValidator = customFileValidator;
 		this.customPaintingValidator = customPaintingValidator;
@@ -62,6 +66,7 @@ public class AdminController {
 		this.slugify = slugify;
 		this.paintingService = paintingService;
 		this.exhibitionService = exhibitionService;
+		this.userService = userService;
 	}
 
 	@GetMapping()
@@ -219,7 +224,7 @@ public class AdminController {
 			exhibition.setImageType(exhibitionDTO.getImage().getContentType());
 			exhibition.setImageData(exhibitionDTO.getImage().getBytes());
 			List<ExhibitionImage> exhibitionImages = new ArrayList<>();
-			for(MultipartFile image : exhibitionDTO.getImages()) {
+			for (MultipartFile image : exhibitionDTO.getImages()) {
 				ExhibitionImage exhibitionImage = new ExhibitionImage();
 				exhibitionImage.setImageName(image.getOriginalFilename());
 				exhibitionImage.setImageType(image.getContentType());
@@ -235,7 +240,7 @@ public class AdminController {
 		redirectAttr.addFlashAttribute("message", "Exhibition added.");
 		return "redirect:/admin/exhibitions";
 	}
-	
+
 	@GetMapping("/exhibitions/{id}/edit")
 	String editExhibition(@PathVariable int id, Model model) {
 		Exhibition exhibition = this.exhibitionService.findById(id);
@@ -250,7 +255,7 @@ public class AdminController {
 		model.addAttribute("images", exhibition.getImages());
 		return "admin/editExhibition";
 	}
-	
+
 	@PostMapping("/exhibitions/{id}/edit")
 	String saveEditedExhibition(@PathVariable int id, @Valid ExhibitionDTO exhibitionDTO, BindingResult bindingResult,
 			RedirectAttributes redirectAttr, Model model) {
@@ -277,7 +282,7 @@ public class AdminController {
 			}
 			if (exhibitionDTO.getImages().length != 0) {
 				List<ExhibitionImage> exhibitionImages = new ArrayList<>();
-				for(MultipartFile image : exhibitionDTO.getImages()) {
+				for (MultipartFile image : exhibitionDTO.getImages()) {
 					ExhibitionImage exhibitionImage = new ExhibitionImage();
 					exhibitionImage.setImageName(image.getOriginalFilename());
 					exhibitionImage.setImageType(image.getContentType());
@@ -294,7 +299,7 @@ public class AdminController {
 		redirectAttr.addFlashAttribute("message", "Exhibition edited.");
 		return "redirect:/admin/exhibitions";
 	}
-	
+
 	@DeleteMapping("/exhibitions/{id}")
 	ResponseEntity<?> deleteExhibition(@PathVariable int id) {
 		Exhibition exhibition = new Exhibition();
@@ -302,7 +307,19 @@ public class AdminController {
 		this.exhibitionService.deleteExhibition(exhibition);
 		return ResponseEntity.ok().build();
 	}
-	
+
+	@GetMapping("/users")
+	String users(@RequestParam("page") Optional<Integer> page, Model model) {
+		int currentPage = page.orElse(1);
+		Page<User> usersPage = userService.findPaginated(currentPage - 1, 10);
+		List<User> listUsers = usersPage.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", usersPage.getTotalPages());
+		model.addAttribute("listUsers", listUsers);
+		model.addAttribute("module", "users");
+		return "admin/users";
+	}
+
 	@GetMapping("/users/new")
 	String newUser(Model model) {
 		model.addAttribute("module", "users");
@@ -312,13 +329,58 @@ public class AdminController {
 	}
 
 	@PostMapping("/users/new")
-	String saveUser(@Valid UserDTO paintingDTO, BindingResult bindingResult, RedirectAttributes redirectAttr) {
+	String saveUser(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttr) {
 		if (bindingResult.hasErrors()) {
 			return "admin/newUser";
 		}
+		User user = new User();
+		user.setUsername(userDTO.getUsername());
+		user.setPassword(userDTO.getPassword());
+		user.setRole(userDTO.getRole());
+		user.setEnabled(userDTO.isEnabled());
+		userService.addUser(user);
 
-		
 		redirectAttr.addFlashAttribute("message", "User added.");
 		return "redirect:/admin/users";
+	}
+
+	@GetMapping("/users/{id}/edit")
+	String editUser(@PathVariable int id, Model model) {
+		User user = this.userService.findById(id);
+		model.addAttribute("module", "users");
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUsername(user.getUsername());
+		userDTO.setRole(user.getRole());
+		userDTO.setEnabled(user.isEnabled());
+		model.addAttribute("id", id);
+		model.addAttribute("userDTO", userDTO);
+		return "admin/editUser";
+	}
+
+	@PostMapping("/users/{id}/edit")
+	String saveEditedUser(@PathVariable int id, @Valid UserDTO userDTO, BindingResult bindingResult,
+			RedirectAttributes redirectAttr, Model model) {
+		User user = this.userService.findById(id);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("module", "users");
+			model.addAttribute("id", id);
+			model.addAttribute("userDTO", userDTO);
+			return "admin/editUser";
+		}
+		user.setUsername(userDTO.getUsername());
+		user.setPassword(userDTO.getPassword());
+		user.setRole(userDTO.getRole());
+		user.setEnabled(userDTO.isEnabled());
+		userService.saveUser(user);
+		redirectAttr.addFlashAttribute("message", "User edited.");
+		return "redirect:/admin/users";
+	}
+	
+	@DeleteMapping("/users/{id}")
+	ResponseEntity<?> deleteUser(@PathVariable int id) {
+		User user = new User();
+		user.setId(id);
+		this.userService.deleteUser(user);
+		return ResponseEntity.ok().build();
 	}
 }

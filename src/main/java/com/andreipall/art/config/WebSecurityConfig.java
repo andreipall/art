@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.andreipall.art.services.UserDetailsServiceImpl;
 
 @Configuration
@@ -43,12 +42,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
         	.mvcMatchers("/").permitAll()
-        	.mvcMatchers("/admin/users/new").permitAll()
-        	.mvcMatchers("/admin/**").hasRole("ADMIN")
+        	//.mvcMatchers("/admin/users/new").permitAll()
+        	.antMatchers("/admin/**").hasRole("ADMIN")
             .and()
-            .formLogin().loginPage("/login").permitAll()
+            .formLogin().loginPage("/login").defaultSuccessUrl("/admin", true).permitAll()
             .and()
             .logout().permitAll().logoutUrl("/logout")
+            .and()
+            .rememberMe().key("7cny6tc6cbc7373b7")
             .and()
             .csrf().disable();
     }
