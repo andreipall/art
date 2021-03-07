@@ -23,6 +23,7 @@
 			<p>Donec eget dolor in arcu vehicula tincidunt ac quis quam. Nulla eleifend vel orci eget volutpat. Aenean hendrerit dolor quam, quis fringilla leo efficitur a. Suspendisse in arcu id justo malesuada varius. Vivamus non consequat eros, nec sodales lectus. Integer elementum posuere mollis. Etiam quis egestas velit. Cras porttitor eu nisl non posuere. Nulla malesuada sagittis vulputate. Vivamus ac lorem nec libero malesuada ornare. Mauris at varius justo, vel consectetur lorem. Sed posuere, justo nec congue tristique, ipsum ante molestie eros, tristique iaculis enim leo eget arcu. </p>
 			
 			<form action="" th:object="${contactDTO}" method="post">
+			  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			  <div th:if="${message}" th:text="${message}" class="alert alert-success" role="alert">
 				A simple success alert—check it out!
 			  </div>

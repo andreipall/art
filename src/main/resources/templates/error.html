@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:include="standardLayout :: page(title='Pall Andrei - Paintings - '+${name})">
+
+<div th:fragment="content">
+
+
+  <div class="row">
+    <!-- Blog Entries Column -->
+      <div class="col-lg-8">
+      		<!-- Title -->
+        	<h1 class="mt-4">Error page</h1>
+		    <table class="table">
+			    <tr>
+			        <td>Date</td>
+			        <td th:text="${timestamp}"/>
+			    </tr>
+			    <tr>
+			        <td>Path</td>
+			        <td th:text="${path}"/>
+			    </tr>
+			    <tr>
+			        <td>Error</td>
+			        <td th:text="${error}"/>
+			    </tr>
+			    <tr>
+			        <td>Status</td>
+			        <td th:text="${status}"/>
+			    </tr>
+			    <tr>
+			        <td>Message</td>
+			        <td th:text="${message}"/>
+			    </tr>
+			</table>
+
+      </div>
+
+    <div th:replace="fragments/sidebar :: sidebar(module=${module})">sidebar</div>
+
+  </div><!-- /.row -->
+
+
+
+</div><!-- /.container -->

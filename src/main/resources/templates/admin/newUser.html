@@ -5,6 +5,7 @@
       <h2>New user</h2>
       <div class="table-responsive">
 		<form th:action="@{/admin/users/new}" th:object="${userDTO}" method="post">
+		  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
           <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
 			  Please correct errors below
 		  </div>

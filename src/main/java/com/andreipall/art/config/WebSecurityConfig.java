@@ -49,8 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout().permitAll().logoutUrl("/logout")
             .and()
-            .rememberMe().key("7cny6tc6cbc7373b7")
-            .and()
-            .csrf().disable();
+            .rememberMe().key("7cny6tc6cbc7373b7");
     }
 }

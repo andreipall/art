@@ -6,6 +6,7 @@
       <h2>Edit exhibition</h2>
       <div class="table-responsive">
 		<form th:action="@{|/admin/exhibitions/${id}/edit|}" th:object="${exhibitionDTO}" method="post" enctype="multipart/form-data">
+		  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
           <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
 			  Please correct errors below
 		  </div>
