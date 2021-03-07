@@ -5,7 +5,10 @@
   <div class="alert alert-primary" role="alert">
 	  Search results for the keyword: <strong th:text="${keyword}">keyword</strong>
   </div>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">	
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+  		<div th:if="${#lists.isEmpty(listPaintings)}">
+		 No results found.
+		</div>	
         <div class="col" th:each="painting : ${listPaintings}">
           <div class="card shadow-sm">
             <a th:href="@{/paintings/{slug}(slug=${painting.slug})}" style="text-align: center;"><img class="img-fluid rounded painting" src="http://placehold.it/900x300" th:src="@{|/paintings/${painting.slug}/${painting.imageName}|}" alt="painting"></a>
