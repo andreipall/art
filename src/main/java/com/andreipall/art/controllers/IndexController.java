@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,7 +78,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/paintings/{slug}")
-	String painting(@PathVariable String slug, Model model) {
+	String painting(@PathVariable String slug, @ModelAttribute CommentDTO commentDTO, Model model) {
 		Painting painting = this.paintingService.findBySlug(slug);
 		if (painting == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity not found");
@@ -88,8 +89,6 @@ public class IndexController {
 		model.addAttribute("image", painting.getImageName());
 		model.addAttribute("createdAt", painting.getCreatedAt());
 		model.addAttribute("comments", painting.getComments());
-		CommentDTO commentDTO = new CommentDTO();
-		model.addAttribute("commentDTO", commentDTO);
 		model.addAttribute("module", "paintings");
 		return "painting";
 	}
@@ -104,7 +103,7 @@ public class IndexController {
 
 	@PostMapping("/paintings/{slug}")
 	String paintingComment(@PathVariable String slug, @Valid CommentDTO commentDTO, BindingResult bindingResult,
-			RedirectAttributes redirectAttr, Model model) {
+			RedirectAttributes redirectAttr, @ModelAttribute PaintingComment paintingComment, Model model) {
 		Painting painting = this.paintingService.findBySlug(slug);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("name", painting.getName());
@@ -117,8 +116,6 @@ public class IndexController {
 			model.addAttribute("module", "paintings");
 			return "painting";
 		}
-
-		PaintingComment paintingComment = new PaintingComment();
 		paintingComment.setPainting(painting);
 		paintingComment.setName(commentDTO.getName());
 		paintingComment.setComment(commentDTO.getComment());
@@ -178,9 +175,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/contact")
-	String contact(Model model) {
-		ContactDTO contactDTO = new ContactDTO();
-		model.addAttribute("contactDTO", contactDTO);
+	String contact(@ModelAttribute ContactDTO contactDTO, Model model) {
 		model.addAttribute("module", "contact");
 		return "contact";
 	}

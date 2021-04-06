@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,10 +95,8 @@ public class AdminController {
 	}
 
 	@GetMapping("/paintings/new")
-	String newPainting(Model model) {
+	String newPainting(@ModelAttribute PaintingDTO paintingDTO, Model model) {
 		model.addAttribute("module", "paintings");
-		PaintingDTO paintingDTO = new PaintingDTO();
-		model.addAttribute("paintingDTO", paintingDTO);
 		return "admin/newPainting";
 	}
 
@@ -125,16 +124,14 @@ public class AdminController {
 	}
 
 	@GetMapping("/paintings/{id}/edit")
-	String editPainting(@PathVariable int id, Model model) {
+	String editPainting(@PathVariable int id, @ModelAttribute PaintingDTO paintingDTO, Model model) {
 		Painting painting = this.paintingService.findById(id);
 		model.addAttribute("module", "paintings");
-		PaintingDTO paintingDTO = new PaintingDTO();
 		paintingDTO.setName(painting.getName());
 		paintingDTO.setDescription(painting.getDescription());
 		model.addAttribute("id", id);
 		model.addAttribute("slug", painting.getSlug());
 		model.addAttribute("image", painting.getImageName());
-		model.addAttribute("paintingDTO", paintingDTO);
 		model.addAttribute("comments", painting.getComments());
 		return "admin/editPainting";
 	}
@@ -200,10 +197,8 @@ public class AdminController {
 	}
 
 	@GetMapping("/exhibitions/new")
-	String newExhibition(Model model) {
+	String newExhibition(@ModelAttribute ExhibitionDTO exhibitionDTO, Model model) {
 		model.addAttribute("module", "exhibitions");
-		ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
-		model.addAttribute("exhibitionDTO", exhibitionDTO);
 		return "admin/newExhibition";
 	}
 
@@ -242,16 +237,14 @@ public class AdminController {
 	}
 
 	@GetMapping("/exhibitions/{id}/edit")
-	String editExhibition(@PathVariable int id, Model model) {
+	String editExhibition(@PathVariable int id, @ModelAttribute ExhibitionDTO exhibitionDTO, Model model) {
 		Exhibition exhibition = this.exhibitionService.findById(id);
 		model.addAttribute("module", "exhibitions");
-		ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
 		exhibitionDTO.setName(exhibition.getName());
 		exhibitionDTO.setDescription(exhibition.getDescription());
 		model.addAttribute("id", id);
 		model.addAttribute("slug", exhibition.getSlug());
 		model.addAttribute("image", exhibition.getImageName());
-		model.addAttribute("exhibitionDTO", exhibitionDTO);
 		model.addAttribute("images", exhibition.getImages());
 		return "admin/editExhibition";
 	}
@@ -321,10 +314,8 @@ public class AdminController {
 	}
 
 	@GetMapping("/users/new")
-	String newUser(Model model) {
+	String newUser(@ModelAttribute UserDTO userDTO, Model model) {
 		model.addAttribute("module", "users");
-		UserDTO userDTO = new UserDTO();
-		model.addAttribute("userDTO", userDTO);
 		return "admin/newUser";
 	}
 
@@ -345,15 +336,13 @@ public class AdminController {
 	}
 
 	@GetMapping("/users/{id}/edit")
-	String editUser(@PathVariable int id, Model model) {
+	String editUser(@PathVariable int id, @ModelAttribute UserDTO userDTO, Model model) {
 		User user = this.userService.findById(id);
 		model.addAttribute("module", "users");
-		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());
 		userDTO.setRole(user.getRole());
 		userDTO.setEnabled(user.isEnabled());
 		model.addAttribute("id", id);
-		model.addAttribute("userDTO", userDTO);
 		return "admin/editUser";
 	}
 
