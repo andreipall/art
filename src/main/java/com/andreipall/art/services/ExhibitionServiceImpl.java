@@ -45,7 +45,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
 	@Override
 	public Exhibition findById(int id) {
-		return this.exhibitionRepository.getOne(id);
+		return this.exhibitionRepository.getById(id);
 	}
 
 	@Override

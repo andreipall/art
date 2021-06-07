@@ -50,7 +50,7 @@ public class PaintingServiceImpl implements PaintingService {
 
 	@Override
 	public Painting findById(int id) {
-		return this.paintingRepository.getOne(id);
+		return this.paintingRepository.getById(id);
 	}
 
 	@Override
