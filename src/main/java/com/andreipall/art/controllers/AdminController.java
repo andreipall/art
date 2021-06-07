@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.andreipall.art.dto.ExhibitionDTO;
 import com.andreipall.art.dto.PaintingDTO;
 import com.andreipall.art.dto.UserDTO;
@@ -364,7 +363,7 @@ public class AdminController {
 		redirectAttr.addFlashAttribute("message", "User edited.");
 		return "redirect:/admin/users";
 	}
-	
+
 	@DeleteMapping("/users/{id}")
 	ResponseEntity<?> deleteUser(@PathVariable int id) {
 		User user = new User();
